@@ -21,11 +21,17 @@ public class FileChooser extends javax.swing.JFrame {
 	private static final long serialVersionUID = -7789326324349057512L;
 	private JFileChooser fileChooser;
 	private MainWindow mainWindow;
+	public final int OUTPUT_MODE;
+	public final int INPUT_MODE;
+	private int mode;
 
 	public FileChooser(MainWindow mainWindow) {
 		super();
 		this.setLocationRelativeTo(null);
 		this.mainWindow = mainWindow;
+		this.OUTPUT_MODE = 102;
+		this.INPUT_MODE = 103;
+		this.mode = 102;
 		initGUI();
 	}
 
@@ -50,12 +56,21 @@ public class FileChooser extends javax.swing.JFrame {
 		}
 	}
 
+	public void setMode(int mode) {
+		this.mode = mode;
+	}
+
 	private void fileChooserActionPerformed(ActionEvent evt) {
 		if (evt.getActionCommand().equals("CancelSelection")) {
 			this.setVisible(false);
 		} else if (evt.getActionCommand().equals("ApproveSelection")) {
-			this.mainWindow.setOutputFile(this.fileChooser.getSelectedFile()
-					.toString());
+			if (this.mode == this.OUTPUT_MODE) {
+				this.mainWindow.setOutputFile(this.fileChooser
+						.getSelectedFile().toString());
+			} else {
+				this.mainWindow.setInputFile(this.fileChooser
+						.getSelectedFile().toString());
+			}
 
 			this.setVisible(false);
 		}

@@ -196,4 +196,8 @@ public class HRMBuilder {
 
 		return true;
 	}
+	
+	public EditEntrys getEditEntrys() {
+		return this.editEntry;
+	}
 }

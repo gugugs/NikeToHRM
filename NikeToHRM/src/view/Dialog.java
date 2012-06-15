@@ -17,18 +17,18 @@ import javax.swing.WindowConstants;
  * PURCHASED FOR THIS MACHINE, SO JIGLOO OR THIS CODE CANNOT BE USED LEGALLY FOR
  * ANY CORPORATE OR COMMERCIAL PURPOSE.
  */
-public class hrmBuildedDialog extends javax.swing.JFrame {
+public class Dialog extends javax.swing.JFrame {
 	private static final long serialVersionUID = -2710328701834244293L;
-	private JLabel jLabel1;
+	private JLabel textLabel;
 	private JButton dialogOkButton;
 
-	public hrmBuildedDialog() {
+	public Dialog() {
 		super();
 		initGUI();
 	}
-
-	public JLabel getLabel() {
-		return this.jLabel1;
+	
+	public void setText(String text) {
+		this.textLabel.setText(text);
 	}
 
 	private void initGUI() {
@@ -39,16 +39,16 @@ public class hrmBuildedDialog extends javax.swing.JFrame {
 			getContentPane().setLayout(null);
 			this.setTitle("Success");
 			{
-				jLabel1 = new JLabel();
-				getContentPane().add(jLabel1);
-				jLabel1.setText("HRM file successfully builded");
-				jLabel1.setBounds(48, 12, 241, 15);
+				textLabel = new JLabel();
+				getContentPane().add(textLabel);
+				textLabel.setText("HRM file successfully builded");
+				textLabel.setBounds(59, 37, 241, 15);
 			}
 			{
 				dialogOkButton = new JButton();
 				getContentPane().add(dialogOkButton);
 				dialogOkButton.setText("OK");
-				dialogOkButton.setBounds(111, 41, 75, 22);
+				dialogOkButton.setBounds(125, 84, 75, 22);
 				dialogOkButton.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent evt) {
 						dialogOkButtonActionPerformed(evt);
@@ -56,7 +56,7 @@ public class hrmBuildedDialog extends javax.swing.JFrame {
 				});
 			}
 			pack();
-			this.setSize(292, 100);
+			this.setSize(337, 147);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
