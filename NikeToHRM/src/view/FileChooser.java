@@ -34,6 +34,10 @@ public class FileChooser extends javax.swing.JFrame {
 		this.mode = 102;
 		initGUI();
 	}
+	
+	public void setMode(int mode) {
+		this.mode = mode;
+	}
 
 	private void initGUI() {
 		try {
@@ -54,10 +58,6 @@ public class FileChooser extends javax.swing.JFrame {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-	}
-
-	public void setMode(int mode) {
-		this.mode = mode;
 	}
 
 	private void fileChooserActionPerformed(ActionEvent evt) {

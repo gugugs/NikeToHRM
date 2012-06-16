@@ -4,11 +4,16 @@ import javax.swing.WindowConstants;
 import javax.swing.border.BevelBorder;
 
 import controller.HRMBuilder;
+
+import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.LinkedList;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
+import javax.swing.JComponent;
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JProgressBar;
@@ -27,6 +32,9 @@ import javax.swing.JTextField;
 public class MainWindow extends javax.swing.JFrame {
 
 	private static final long serialVersionUID = 3172688540921699213L;
+	public final int WRONG_FILE = 1133;
+	public final int WRONG_DATA = 2233;
+	public final int BUILD_HRM = 3333;
 	private HRMBuilder hrmBuilder;
 	private JTextField fileInputField;
 	private FileChooser fileChooser;
@@ -48,12 +56,13 @@ public class MainWindow extends javax.swing.JFrame {
 	private JLabel jLabel1;
 	private JButton buildHrmButton;
 	private Dialog dialog;
+	private String inputFile;
 
 	public MainWindow(HRMBuilder hrmBuilder) {
 		super();
 		this.hrmBuilder = hrmBuilder;
 		this.fileChooser = new FileChooser(this);
-		this.dialog = new Dialog();
+		this.dialog = new Dialog(this);
 		this.dialog.setVisible(false);
 		initGUI();
 	}
@@ -199,43 +208,79 @@ public class MainWindow extends javax.swing.JFrame {
 				}
 			});
 		}
+
+		this.buildHrmButton.setEnabled(false);
+		this.browseOutputButton.setEnabled(false);
 	}
 
-	private void setLabels() {
-		// this.readedFromLabel.setText("ERROR!");
-		// this.dateLabel.setText("- - -");
-		// this.startTimeLabel.setText("- - -");
-		// this.durationLabel.setText("- - -");
-		// this.weightLabel.setText("- - -");
-		// this.maxBpmLabel.setText("- - -");
-		// this.sModeLabel.setText("- - -");
-		// this.intervalLabel.setText("- - -");
+	public JButton getBrowseInputButton() {
+		return this.browseInputButton;
+	}
 
-		this.dateLabel.setText(this.hrmBuilder.getEditEntrys().getDate());
-		this.startTimeLabel.setText(this.hrmBuilder.getEditEntrys()
-				.getStartTime());
-		this.durationLabel.setText(this.hrmBuilder.getEditEntrys()
-				.getDuration());
-		this.maxBpmLabel.setText(this.hrmBuilder.getEditEntrys().getMaxBPM());
-		this.sModeLabel.setText(this.hrmBuilder.getEditEntrys().getsMode());
-		this.intervalLabel.setText(this.hrmBuilder.getEditEntrys()
-				.getInterval());
+	public void deactivate() {
+		this.browseInputButton.setEnabled(false);
+		this.browseOutputButton.setEnabled(false);
+		this.buildHrmButton.setEnabled(false);
+	}
+	
+	public void activate() {
+		this.browseInputButton.setEnabled(true);
+		this.browseOutputButton.setEnabled(true);
+		this.buildHrmButton.setEnabled(true);
+	}
+	
+	private void setLabels(int status) {
+		if (status == this.BUILD_HRM) {
+			this.dateLabel.setText(this.hrmBuilder.getEditEntrys().getDate());
+			this.startTimeLabel.setText(this.hrmBuilder.getEditEntrys()
+					.getStartTime());
+			this.durationLabel.setText(this.hrmBuilder.getEditEntrys()
+					.getDuration());
+			this.maxBpmLabel.setText(this.hrmBuilder.getEditEntrys()
+					.getMaxBPM());
+			this.sModeLabel.setText(this.hrmBuilder.getEditEntrys().getsMode());
+			this.intervalLabel.setText(this.hrmBuilder.getEditEntrys()
+					.getInterval());
+			this.activate();
+		} else {
+			this.dateLabel.setText("- - -");
+			this.startTimeLabel.setText("- - -");
+			this.durationLabel.setText("- - -");
+			this.maxBpmLabel.setText("- - -");
+			this.sModeLabel.setText("- - -");
+			this.intervalLabel.setText("- - -");
+			this.deactivate();
+			if (status == this.WRONG_DATA) {
+				this.dialog.setMode(this.dialog.DATA_ERROR);
+			} else if (status == this.WRONG_FILE) {
+				this.dialog.setMode(this.dialog.FILE_ERROR);
+			}
+			this.dialog.setVisible(true);
+		}
 	}
 
 	public void setInputFile(String file) {
-		this.fileInputField.setText(file);
+		this.inputFile = file;
+		this.deactivate();
 		this.progressBar.setIndeterminate(true);
-		this.setEnabled(false);
 
 		new Thread(new Runnable() {
 
 			@Override
 			public void run() {
-				hrmBuilder.getDataFromFile(fileInputField.getText());
-				hrmBuilder.findTargetWords();
-				setLabels();
+				if (hrmBuilder.getDataFromFile(inputFile)) {
+					if (hrmBuilder.findTargetWords()) {
+						fileInputField.setText(inputFile);
+						setLabels(BUILD_HRM);
+					} else {
+						fileInputField.setText("");
+						setLabels(WRONG_DATA);
+					}
+				} else {
+					fileInputField.setText("");
+					setLabels(WRONG_FILE);
+				}
 				progressBar.setIndeterminate(false);
-				setEnabled(true);
 			}
 		}).start();
 	}
@@ -256,7 +301,7 @@ public class MainWindow extends javax.swing.JFrame {
 
 	private void buildHrmButtonActionPerformed(ActionEvent evt) {
 		this.progressBar.setIndeterminate(true);
-		this.setEnabled(false);
+		this.deactivate();
 
 		new Thread(new Runnable() {
 
@@ -274,17 +319,15 @@ public class MainWindow extends javax.swing.JFrame {
 						StringBuilder outputFileBuilder = new StringBuilder();
 						outputFileBuilder.append(fileOutputField.getText()
 								+ ".hrm");
-						
+
 						hrmBuilder.buildHrmFile(outputFileBuilder.toString());
 					} else {
 						hrmBuilder.buildHrmFile(fileOutputField.getText());
-					}	
+					}
 				}
-				dialog.setText("HRM file successfully builded !");
-				dialog.setTitle("Success");
+				dialog.setMode(dialog.HRM_BUILDED);
 				dialog.setVisible(true);
 				progressBar.setIndeterminate(false);
-				setEnabled(true);
 			}
 		}).start();
 	}

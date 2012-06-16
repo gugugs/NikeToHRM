@@ -21,14 +21,35 @@ public class Dialog extends javax.swing.JFrame {
 	private static final long serialVersionUID = -2710328701834244293L;
 	private JLabel textLabel;
 	private JButton dialogOkButton;
+	private MainWindow mainWindow;
+	public final int HRM_BUILDED = 434;
+	public final int FILE_ERROR = 333;
+	public final int DATA_ERROR = 444;
+	private int mode;
 
-	public Dialog() {
+	public Dialog(MainWindow mainWindow) {
 		super();
+		mode = 0;
+		this.mainWindow = mainWindow;
 		initGUI();
 	}
 	
 	public void setText(String text) {
 		this.textLabel.setText(text);
+	}
+	
+	public void setMode(int mode) {
+		this.mode = mode;
+		if (mode == this.HRM_BUILDED) {
+			this.setText("HRM file successfully builded !");
+			this.setTitle("Success");
+		} else if (mode == this.FILE_ERROR) {
+			this.setText("Wrong file type");
+			this.setTitle("Error");
+		} else if (mode == this.DATA_ERROR) {
+			this.setText("Cannot read Data");
+			this.setTitle("Error");
+		}
 	}
 
 	private void initGUI() {
@@ -37,11 +58,9 @@ public class Dialog extends javax.swing.JFrame {
 			this.setLocationRelativeTo(null);
 			this.setResizable(false);
 			getContentPane().setLayout(null);
-			this.setTitle("Success");
 			{
 				textLabel = new JLabel();
 				getContentPane().add(textLabel);
-				textLabel.setText("HRM file successfully builded");
 				textLabel.setBounds(59, 37, 241, 15);
 			}
 			{
@@ -63,6 +82,11 @@ public class Dialog extends javax.swing.JFrame {
 	}
 
 	private void dialogOkButtonActionPerformed(ActionEvent evt) {
+		if (this.mode == this.HRM_BUILDED) {
+			mainWindow.activate();
+		} else if (mode == this.DATA_ERROR || mode == this.FILE_ERROR) {
+			mainWindow.getBrowseInputButton().setEnabled(true);
+		}
 		this.setVisible(false);
 	}
 

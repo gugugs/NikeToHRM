@@ -12,6 +12,8 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Map.Entry;
 
+import javax.activation.MimetypesFileTypeMap;
+
 public class HRMBuilder {
 
 	private File inputFile;
@@ -25,6 +27,7 @@ public class HRMBuilder {
 	private HashMap<String, TargetWord> targetWords;
 	private boolean wordComplete;
 	private EditEntrys editEntry;
+	private int possibleCounter;
 
 	public HRMBuilder() {
 		inputString = new LinkedList<Character>();
@@ -42,7 +45,14 @@ public class HRMBuilder {
 	}
 
 	public boolean getDataFromFile(String filePath) {
+		this.inputString = new LinkedList<Character>();
 		try {
+			if (!(filePath.toCharArray()[filePath.length() - 1] == 'l'
+					&& filePath.toCharArray()[filePath.length() - 2] == 'm'
+					&& filePath.toCharArray()[filePath.length() - 3] == 't'
+					&& filePath.toCharArray()[filePath.length() - 4] == 'h')) {
+				return false;
+			}
 			inputFile = new File(filePath);
 			FIStream = new FileInputStream(inputFile);
 			BReader = new BufferedReader(new InputStreamReader(FIStream));
@@ -66,7 +76,8 @@ public class HRMBuilder {
 		return true;
 	}
 
-	public void findTargetWords() {
+	public boolean findTargetWords() {
+		this.possibleCounter = 0;
 		for (counter = 0; counter < inputString.size(); counter++) {
 			currentCharacter = inputString.get(counter);
 
@@ -82,18 +93,25 @@ public class HRMBuilder {
 						element.getValue().setEndPosition(counter);
 
 						if (element.getKey().equals("activityType")) {
+							this.possibleCounter++;
 							editEntry.activityType(element.getValue());
 						} else if (element.getKey().equals("startTimeUtc")) {
+							this.possibleCounter++;
 							editEntry.startTimeUtc(element.getValue());
 						} else if (element.getKey().equals("duration")) {
+							this.possibleCounter++;
 							editEntry.duration(element.getValue());
 						} else if (element.getKey().equals("maximumHeartRate")) {
+							this.possibleCounter++;
 							editEntry.maximumHeartRate(element.getValue());
 						} else if (element.getKey().equals("intervalMetric")) {
+							this.possibleCounter++;
 							editEntry.intervalMetric(element.getValue());
 						} else if (element.getKey().equals("distance")) {
+							this.possibleCounter++;
 							editEntry.distance(element.getValue());
 						} else if (element.getKey().equals("heartrate")) {
+							this.possibleCounter++;
 							editEntry.heartrate(element.getValue());
 						}
 
@@ -103,6 +121,15 @@ public class HRMBuilder {
 				}
 			}
 		}
+		
+		for (Entry<String, TargetWord> element : targetWords.entrySet()) {
+			element.getValue().reset();
+		}
+		
+		if (this.possibleCounter == 7) {
+			return true;
+		}
+		return false;
 	}
 
 	public boolean buildHrmFile(String outputFile) {
@@ -196,7 +223,7 @@ public class HRMBuilder {
 
 		return true;
 	}
-	
+
 	public EditEntrys getEditEntrys() {
 		return this.editEntry;
 	}
