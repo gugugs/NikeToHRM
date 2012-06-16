@@ -12,8 +12,6 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Map.Entry;
 
-import javax.activation.MimetypesFileTypeMap;
-
 public class HRMBuilder {
 
 	private File inputFile;
@@ -124,6 +122,7 @@ public class HRMBuilder {
 		
 		for (Entry<String, TargetWord> element : targetWords.entrySet()) {
 			element.getValue().reset();
+			element.getValue().setFindStatus(false);
 		}
 		
 		if (this.possibleCounter == 7) {
