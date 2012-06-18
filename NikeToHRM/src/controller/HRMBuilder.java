@@ -8,8 +8,8 @@ import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.Map.Entry;
 
 public class HRMBuilder {
@@ -20,7 +20,7 @@ public class HRMBuilder {
 	private int counter;
 	private String strLine;
 	private char[] strLineArray;
-	private LinkedList<Character> inputString;
+	private ArrayList<Character> inputString;
 	private Character currentCharacter;
 	private HashMap<String, TargetWord> targetWords;
 	private boolean wordComplete;
@@ -28,7 +28,7 @@ public class HRMBuilder {
 	private int possibleCounter;
 
 	public HRMBuilder() {
-		inputString = new LinkedList<Character>();
+		inputString = new ArrayList<Character>();
 		targetWords = new HashMap<String, TargetWord>();
 
 		targetWords.put("activityType", new TargetWord("activityType"));
@@ -43,7 +43,7 @@ public class HRMBuilder {
 	}
 
 	public boolean getDataFromFile(String filePath) {
-		this.inputString = new LinkedList<Character>();
+		this.inputString = new ArrayList<Character>();
 		try {
 			if (!(filePath.toCharArray()[filePath.length() - 1] == 'l'
 					&& filePath.toCharArray()[filePath.length() - 2] == 'm'
@@ -76,7 +76,6 @@ public class HRMBuilder {
 
 	public boolean findTargetWords() {
 		this.possibleCounter = 0;
-		System.out.print(inputString.size());
 		for (counter = 0; counter < inputString.size(); counter++) {
 			currentCharacter = inputString.get(counter);
 

@@ -1,5 +1,6 @@
 package controller;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 
 public class EditEntrys {
@@ -12,7 +13,7 @@ public class EditEntrys {
 	private String interval;
 	private LinkedList<String> distanceValues;
 	private LinkedList<String> heartRateValues;
-	private LinkedList<Character> inputString;
+	private ArrayList<Character> inputString;
 
 	public void activityType(TargetWord targetWord) {
 		StringBuffer buffer = new StringBuffer();
@@ -188,7 +189,7 @@ public class EditEntrys {
 		}
 	}
 
-	public void setInputString(LinkedList<Character> inputString) {
+	public void setInputString(ArrayList<Character> inputString) {
 		this.inputString = inputString;
 	}
 
