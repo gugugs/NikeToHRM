@@ -76,6 +76,7 @@ public class HRMBuilder {
 
 	public boolean findTargetWords() {
 		this.possibleCounter = 0;
+		System.out.print(inputString.size());
 		for (counter = 0; counter < inputString.size(); counter++) {
 			currentCharacter = inputString.get(counter);
 
