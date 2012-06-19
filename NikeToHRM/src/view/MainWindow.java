@@ -67,7 +67,7 @@ public class MainWindow extends javax.swing.JFrame {
 		try {
 			setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 			pack();
-			this.setSize(468, 299);
+			this.setSize(589, 415);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
