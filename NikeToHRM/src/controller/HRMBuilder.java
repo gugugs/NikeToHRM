@@ -85,6 +85,9 @@ public class HRMBuilder {
 		int possibleCounter = 0;
 		Character currentCharacter;
 		boolean wordComplete;
+		this.heartRateData = false;
+		this.gpsData = false;
+		this.distanceData = false;
 		for (int counter = 0; counter < inputString.size(); counter++) {
 			currentCharacter = inputString.get(counter);
 
@@ -321,5 +324,13 @@ public class HRMBuilder {
 
 	public boolean getGpsStatus() {
 		return this.gpsData;
+	}
+	
+	public boolean getHeartRateStatus() {
+		return this.heartRateData;
+	}
+	
+	public boolean getDistanceStatus() {
+		return this.distanceData;
 	}
 }

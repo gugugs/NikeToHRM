@@ -32,16 +32,13 @@ public class MainWindow extends javax.swing.JFrame {
 	public final int WRONG_DATA = 2233;
 	public final int BUILD_HRM = 3333;
 	private HRMBuilder hrmBuilder;
+	private JButton buildGpxButton;
 	private JTextField fileInputField;
 	private FileChooser fileChooser;
-	private JLabel intervalLabel;
 	private JLabel sModeLabel;
-	private JLabel maxBpmLabel;
 	private JLabel durationLabel;
 	private JLabel startTimeLabel;
 	private JLabel dateLabel;
-	private JLabel jLabel7;
-	private JLabel jLabel5;
 	private JButton browseInputButton;
 	private JProgressBar progressBar;
 	private JButton browseOutputButton;
@@ -67,7 +64,7 @@ public class MainWindow extends javax.swing.JFrame {
 		try {
 			setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 			pack();
-			this.setSize(589, 415);
+			this.setSize(519, 228);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -77,12 +74,12 @@ public class MainWindow extends javax.swing.JFrame {
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		getContentPane().setLayout(null);
 		this.setResizable(false);
-		this.setTitle("Nike+ data to HRM converter (Lukas Köhler)");
+		this.setTitle("Nike+ data to HRM/GPX converter");
 		{
 			buildHrmButton = new JButton();
 			getContentPane().add(buildHrmButton);
 			buildHrmButton.setText("Build HRM file");
-			buildHrmButton.setBounds(274, 237, 176, 22);
+			buildHrmButton.setBounds(328, 78, 177, 22);
 			buildHrmButton.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent evt) {
 					buildHrmButtonActionPerformed(evt);
@@ -92,79 +89,55 @@ public class MainWindow extends javax.swing.JFrame {
 		{
 			jLabel1 = new JLabel();
 			getContentPane().add(jLabel1);
-			jLabel1.setText("Date:");
-			jLabel1.setBounds(12, 92, 44, 15);
+			jLabel1.setText("Date");
+			jLabel1.setBounds(12, 109, 149, 15);
 		}
 		{
 			jLabel2 = new JLabel();
 			getContentPane().add(jLabel2);
 			jLabel2.setText("Start Time:");
-			jLabel2.setBounds(12, 113, 82, 15);
+			jLabel2.setBounds(12, 130, 149, 15);
 		}
 		{
 			jLabel3 = new JLabel();
 			getContentPane().add(jLabel3);
 			jLabel3.setText("Duration:");
-			jLabel3.setBounds(12, 134, 82, 15);
-		}
-		{
-			jLabel5 = new JLabel();
-			getContentPane().add(jLabel5);
-			jLabel5.setText("Maximum BPM:");
-			jLabel5.setBounds(12, 155, 111, 15);
+			jLabel3.setBounds(12, 151, 149, 15);
 		}
 		{
 			jLabel6 = new JLabel();
 			getContentPane().add(jLabel6);
-			jLabel6.setText("S Mode:");
-			jLabel6.setBounds(12, 176, 87, 15);
-		}
-		{
-			jLabel7 = new JLabel();
-			getContentPane().add(jLabel7);
-			jLabel7.setText("Interval: ");
-			jLabel7.setBounds(12, 197, 64, 15);
+			jLabel6.setText("Mode:");
+			jLabel6.setBounds(12, 88, 149, 15);
 		}
 		{
 			dateLabel = new JLabel();
 			getContentPane().add(dateLabel);
 			dateLabel.setText("- - -");
-			dateLabel.setBounds(140, 92, 209, 15);
+			dateLabel.setBounds(99, 109, 207, 15);
 		}
 		{
 			startTimeLabel = new JLabel();
 			getContentPane().add(startTimeLabel);
 			startTimeLabel.setText("- - -");
-			startTimeLabel.setBounds(140, 113, 209, 15);
+			startTimeLabel.setBounds(100, 130, 207, 15);
 		}
 		{
 			durationLabel = new JLabel();
 			getContentPane().add(durationLabel);
 			durationLabel.setText("- - -");
-			durationLabel.setBounds(140, 134, 209, 15);
-		}
-		{
-			maxBpmLabel = new JLabel();
-			getContentPane().add(maxBpmLabel);
-			maxBpmLabel.setText("- - -");
-			maxBpmLabel.setBounds(141, 155, 209, 15);
+			durationLabel.setBounds(100, 151, 207, 15);
 		}
 		{
 			sModeLabel = new JLabel();
 			getContentPane().add(sModeLabel);
 			sModeLabel.setText("- - -");
-			sModeLabel.setBounds(141, 176, 209, 15);
-		}
-		{
-			intervalLabel = new JLabel();
-			getContentPane().add(intervalLabel);
-			intervalLabel.setText("- - -");
-			intervalLabel.setBounds(141, 197, 209, 15);
+			sModeLabel.setBounds(99, 88, 207, 15);
 		}
 		{
 			fileOutputField = new JTextField();
 			getContentPane().add(fileOutputField);
-			fileOutputField.setBounds(12, 54, 250, 22);
+			fileOutputField.setBounds(12, 46, 305, 22);
 			fileOutputField.setEditable(false);
 			fileOutputField.setBorder(BorderFactory
 					.createBevelBorder(BevelBorder.LOWERED));
@@ -173,7 +146,7 @@ public class MainWindow extends javax.swing.JFrame {
 			browseOutputButton = new JButton();
 			getContentPane().add(browseOutputButton);
 			browseOutputButton.setText("Browse output file");
-			browseOutputButton.setBounds(274, 56, 176, 20);
+			browseOutputButton.setBounds(329, 47, 176, 20);
 			browseOutputButton.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent evt) {
 					browseOutputButtonActionPerformed(evt);
@@ -183,12 +156,12 @@ public class MainWindow extends javax.swing.JFrame {
 		{
 			progressBar = new JProgressBar();
 			getContentPane().add(progressBar);
-			progressBar.setBounds(12, 237, 250, 21);
+			progressBar.setBounds(328, 166, 176, 22);
 		}
 		{
 			fileInputField = new JTextField();
 			getContentPane().add(fileInputField);
-			fileInputField.setBounds(12, 12, 250, 22);
+			fileInputField.setBounds(12, 12, 305, 22);
 			fileInputField.setEditable(false);
 			fileInputField.setBorder(BorderFactory
 					.createBevelBorder(BevelBorder.LOWERED));
@@ -197,16 +170,28 @@ public class MainWindow extends javax.swing.JFrame {
 			browseInputButton = new JButton();
 			getContentPane().add(browseInputButton);
 			browseInputButton.setText("Browse input file");
-			browseInputButton.setBounds(274, 12, 176, 22);
+			browseInputButton.setBounds(329, 12, 176, 22);
 			browseInputButton.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent evt) {
 					browseInputButtonActionPerformed(evt);
 				}
 			});
 		}
+		{
+			buildGpxButton = new JButton();
+			getContentPane().add(buildGpxButton);
+			buildGpxButton.setText("Build GPX file");
+			buildGpxButton.setBounds(328, 111, 176, 22);
+			buildGpxButton.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent evt) {
+					buildGpxButtonActionPerformed(evt);
+				}
+			});
+		}
 
 		this.buildHrmButton.setEnabled(false);
 		this.browseOutputButton.setEnabled(false);
+		this.buildGpxButton.setEnabled(false);
 	}
 
 	public JButton getBrowseInputButton() {
@@ -217,34 +202,66 @@ public class MainWindow extends javax.swing.JFrame {
 		this.browseInputButton.setEnabled(false);
 		this.browseOutputButton.setEnabled(false);
 		this.buildHrmButton.setEnabled(false);
+		this.buildGpxButton.setEnabled(false);
 	}
 
 	public void activate() {
 		this.browseInputButton.setEnabled(true);
 		this.browseOutputButton.setEnabled(true);
 		this.buildHrmButton.setEnabled(true);
+		this.buildGpxButton.setEnabled(true);
 	}
 
 	private void setLabels(int status) {
 		if (status == this.BUILD_HRM) {
-			this.dateLabel.setText(this.hrmBuilder.getEditEntrys().getDate());
-			this.startTimeLabel.setText(this.hrmBuilder.getEditEntrys()
-					.getStartTime());
-			this.durationLabel.setText(this.hrmBuilder.getEditEntrys()
-					.getDuration());
-			this.maxBpmLabel.setText(this.hrmBuilder.getEditEntrys()
-					.getMaxBPM());
-			this.sModeLabel.setText(this.hrmBuilder.getEditEntrys().getsMode());
-			this.intervalLabel.setText(this.hrmBuilder.getEditEntrys()
-					.getInterval());
+			this.dateLabel.setText(this.hrmBuilder.getEditEntrys().getDate()
+					.subSequence(6, 8)
+					+ "-"
+					+ this.hrmBuilder.getEditEntrys().getDate()
+							.subSequence(4, 6)
+					+ "-"
+					+ this.hrmBuilder.getEditEntrys().getDate()
+							.subSequence(0, 4));
+			this.startTimeLabel.setText(this.hrmBuilder
+					.getEditEntrys()
+					.getStartTime()
+					.substring(
+							0,
+							this.hrmBuilder.getEditEntrys().getStartTime()
+									.length() - 2));
+			this.durationLabel.setText(this.hrmBuilder
+					.getEditEntrys()
+					.getDuration()
+					.substring(
+							0,
+							this.hrmBuilder.getEditEntrys().getStartTime()
+									.length() - 2));
+
+			if (this.hrmBuilder.getGpsStatus()) {
+				if (this.hrmBuilder.getHeartRateStatus()) {
+					this.sModeLabel.setText("GPS and Heartrate");
+				} else {
+					this.sModeLabel.setText("Only GPS");
+				}
+			} else {
+				if (this.hrmBuilder.getDistanceStatus()) {
+					this.sModeLabel.setText("Heartrate and distance");
+				} else {
+					this.sModeLabel.setText("Only Heartrate");
+				}
+			}
+
 			this.activate();
+			if (this.hrmBuilder.getGpsStatus()) {
+				this.buildGpxButton.setEnabled(true);
+			} else {
+				this.buildGpxButton.setEnabled(false);
+			}
 		} else {
 			this.dateLabel.setText("- - -");
 			this.startTimeLabel.setText("- - -");
 			this.durationLabel.setText("- - -");
-			this.maxBpmLabel.setText("- - -");
-			this.sModeLabel.setText("- - -");
-			this.intervalLabel.setText("- - -");
+			sModeLabel.setText("- - -");
 			this.deactivate();
 			if (status == this.WRONG_DATA) {
 				this.dialog.setMode(this.dialog.DATA_ERROR);
@@ -306,22 +323,29 @@ public class MainWindow extends javax.swing.JFrame {
 				if (fileOutputField.getText().equals("")) {
 					hrmBuilder.buildHrmFile();
 				} else {
-					if (fileOutputField.getText().toCharArray()[fileOutputField
-							.getText().length() - 1] != 'm'
-							|| fileOutputField.getText().toCharArray()[fileOutputField
-									.getText().length() - 2] != 'r'
-							|| fileOutputField.getText().toCharArray()[fileOutputField
-									.getText().length() - 3] != 'h') {
-						StringBuilder outputFileBuilder = new StringBuilder();
-						outputFileBuilder.append(fileOutputField.getText()
-								+ ".hrm");
-
-						hrmBuilder.buildHrmFile(outputFileBuilder.toString());
-					} else {
-						hrmBuilder.buildHrmFile(fileOutputField.getText());
-					}
+					hrmBuilder.buildHrmFile(fileOutputField.getText());
 				}
 				dialog.setMode(dialog.HRM_BUILDED);
+				dialog.setVisible(true);
+				progressBar.setIndeterminate(false);
+			}
+		}).start();
+	}
+	
+	private void buildGpxButtonActionPerformed(ActionEvent evt) {
+		this.progressBar.setIndeterminate(true);
+		this.deactivate();
+
+		new Thread(new Runnable() {
+
+			@Override
+			public void run() {
+				if (fileOutputField.getText().equals("")) {
+					hrmBuilder.buildGpxFile();
+				} else {
+					hrmBuilder.buildGpxFile(fileOutputField.getText());
+				}
+				dialog.setMode(dialog.GPX_BUILDED);
 				dialog.setVisible(true);
 				progressBar.setIndeterminate(false);
 			}

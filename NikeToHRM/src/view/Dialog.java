@@ -23,6 +23,7 @@ public class Dialog extends javax.swing.JFrame {
 	private JButton dialogOkButton;
 	private MainWindow mainWindow;
 	public final int HRM_BUILDED = 434;
+	public final int GPX_BUILDED = 455;
 	public final int FILE_ERROR = 333;
 	public final int DATA_ERROR = 444;
 	private int mode;
@@ -49,6 +50,9 @@ public class Dialog extends javax.swing.JFrame {
 		} else if (mode == this.DATA_ERROR) {
 			this.setText("Cannot read Data");
 			this.setTitle("Error");
+		} else if (mode == this.GPX_BUILDED) {
+			this.setText("GPX file successfully builded !");
+			this.setTitle("Success");
 		}
 	}
 
@@ -82,7 +86,7 @@ public class Dialog extends javax.swing.JFrame {
 	}
 
 	private void dialogOkButtonActionPerformed(ActionEvent evt) {
-		if (this.mode == this.HRM_BUILDED) {
+		if (this.mode == this.HRM_BUILDED || this.mode == this.GPX_BUILDED) {
 			mainWindow.activate();
 		} else if (mode == this.DATA_ERROR || mode == this.FILE_ERROR) {
 			mainWindow.getBrowseInputButton().setEnabled(true);
