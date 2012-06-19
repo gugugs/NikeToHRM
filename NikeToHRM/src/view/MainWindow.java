@@ -218,13 +218,13 @@ public class MainWindow extends javax.swing.JFrame {
 		this.browseOutputButton.setEnabled(false);
 		this.buildHrmButton.setEnabled(false);
 	}
-	
+
 	public void activate() {
 		this.browseInputButton.setEnabled(true);
 		this.browseOutputButton.setEnabled(true);
 		this.buildHrmButton.setEnabled(true);
 	}
-	
+
 	private void setLabels(int status) {
 		if (status == this.BUILD_HRM) {
 			this.dateLabel.setText(this.hrmBuilder.getEditEntrys().getDate());

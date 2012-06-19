@@ -7,17 +7,18 @@ public class TargetWord {
 	private int startPosition;
 	private int endPosition;
 	private boolean findStatus;
-	public TargetWord (String word) {
+
+	public TargetWord(String word) {
 		this.word = word;
 		this.currentRightLetterNumber = 0;
-		this.targetRightLetter = word.length()-1;
+		this.targetRightLetter = word.length() - 1;
 		this.findStatus = false;
 	}
-	
+
 	public int getCurrentRightLetter() {
 		return this.word.toCharArray()[currentRightLetterNumber];
 	}
-	
+
 	public boolean increaseCurrentRightLetterNumber() {
 		if (currentRightLetterNumber == targetRightLetter) {
 			this.findStatus = true;
@@ -27,19 +28,19 @@ public class TargetWord {
 			return false;
 		}
 	}
-	
-	public boolean getFindStatus () {
+
+	public boolean getFindStatus() {
 		return this.findStatus;
 	}
-	
-	public void setFindStatus (boolean status) {
+
+	public void setFindStatus(boolean status) {
 		this.findStatus = status;
 	}
-	
+
 	public String getWord() {
 		return this.word;
 	}
-	
+
 	public void reset() {
 		this.currentRightLetterNumber = 0;
 	}

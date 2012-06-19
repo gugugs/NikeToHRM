@@ -14,32 +14,35 @@ import java.util.Map.Entry;
 
 public class HRMBuilder {
 
-	private File inputFile;
-	private FileInputStream FIStream;
-	private BufferedReader BReader;
-	private int counter;
-	private String strLine;
-	private char[] strLineArray;
 	private ArrayList<Character> inputString;
-	private Character currentCharacter;
 	private HashMap<String, TargetWord> targetWords;
-	private boolean wordComplete;
 	private EditEntrys editEntry;
-	private int possibleCounter;
+	private boolean heartRateData;
+	private boolean distanceData;
+	private boolean gpsData;
 
 	public HRMBuilder() {
-		inputString = new ArrayList<Character>();
-		targetWords = new HashMap<String, TargetWord>();
+		this.inputString = new ArrayList<Character>();
+		this.targetWords = new HashMap<String, TargetWord>();
 
-		targetWords.put("activityType", new TargetWord("activityType"));
-		targetWords.put("startTimeUtc", new TargetWord("startTimeUtc"));
-		targetWords.put("duration", new TargetWord("duration"));
-		targetWords.put("maximumHeartRate", new TargetWord("maximumHeartRate"));
-		targetWords.put("intervalMetric", new TargetWord("intervalMetric"));
-		targetWords.put("distance", new TargetWord("\"type\":\"DISTANCE\""));
-		targetWords.put("heartrate", new TargetWord("\"type\":\"HEARTRATE\""));
+		this.heartRateData = false;
+		this.distanceData = false;
+		this.gpsData = false;
 
-		editEntry = new EditEntrys();
+		this.targetWords.put("activityType", new TargetWord("activityType"));
+		this.targetWords.put("startTimeUtc", new TargetWord("startTimeUtc"));
+		this.targetWords.put("duration", new TargetWord("duration"));
+		this.targetWords.put("maximumHeartRate", new TargetWord(
+				"maximumHeartRate"));
+		this.targetWords
+				.put("intervalMetric", new TargetWord("intervalMetric"));
+		this.targetWords.put("distance",
+				new TargetWord("\"type\":\"DISTANCE\""));
+		this.targetWords.put("heartrate", new TargetWord(
+				"\"type\":\"HEARTRATE\""));
+		this.targetWords.put("waypoints", new TargetWord("\"waypoints\""));
+
+		this.editEntry = new EditEntrys();
 	}
 
 	public boolean getDataFromFile(String filePath) {
@@ -47,22 +50,26 @@ public class HRMBuilder {
 		try {
 			if (!(filePath.toCharArray()[filePath.length() - 1] == 'l'
 					&& filePath.toCharArray()[filePath.length() - 2] == 'm'
-					&& filePath.toCharArray()[filePath.length() - 3] == 't'
-					&& filePath.toCharArray()[filePath.length() - 4] == 'h')) {
+					&& filePath.toCharArray()[filePath.length() - 3] == 't' && filePath
+						.toCharArray()[filePath.length() - 4] == 'h')) {
 				return false;
 			}
-			inputFile = new File(filePath);
-			FIStream = new FileInputStream(inputFile);
-			BReader = new BufferedReader(new InputStreamReader(FIStream));
+			File inputFile = new File(filePath);
+			FileInputStream FIStream = new FileInputStream(inputFile);
+			BufferedReader BReader = new BufferedReader(new InputStreamReader(
+					FIStream));
 
+			String strLine;
+			char[] strLineArray;
 			while ((strLine = BReader.readLine()) != null) {
 				strLineArray = strLine.toCharArray();
-				for (counter = 0; counter < strLine.length(); counter++) {
+				for (int counter = 0; counter < strLine.length(); counter++) {
 					inputString.add(strLineArray[counter]);
 				}
 			}
+			strLine = null;
 			FIStream.close();
-			editEntry.setInputString(inputString);
+			this.editEntry.setInputString(this.inputString);
 
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
@@ -75,8 +82,10 @@ public class HRMBuilder {
 	}
 
 	public boolean findTargetWords() {
-		this.possibleCounter = 0;
-		for (counter = 0; counter < inputString.size(); counter++) {
+		int possibleCounter = 0;
+		Character currentCharacter;
+		boolean wordComplete;
+		for (int counter = 0; counter < inputString.size(); counter++) {
 			currentCharacter = inputString.get(counter);
 
 			for (Entry<String, TargetWord> element : targetWords.entrySet()) {
@@ -91,26 +100,29 @@ public class HRMBuilder {
 						element.getValue().setEndPosition(counter);
 
 						if (element.getKey().equals("activityType")) {
-							this.possibleCounter++;
+							possibleCounter++;
 							editEntry.activityType(element.getValue());
 						} else if (element.getKey().equals("startTimeUtc")) {
-							this.possibleCounter++;
+							possibleCounter++;
 							editEntry.startTimeUtc(element.getValue());
 						} else if (element.getKey().equals("duration")) {
-							this.possibleCounter++;
+							possibleCounter++;
 							editEntry.duration(element.getValue());
 						} else if (element.getKey().equals("maximumHeartRate")) {
-							this.possibleCounter++;
+							possibleCounter++;
 							editEntry.maximumHeartRate(element.getValue());
 						} else if (element.getKey().equals("intervalMetric")) {
-							this.possibleCounter++;
+							possibleCounter++;
 							editEntry.intervalMetric(element.getValue());
 						} else if (element.getKey().equals("distance")) {
-							this.possibleCounter++;
 							editEntry.distance(element.getValue());
+							this.distanceData = true;
 						} else if (element.getKey().equals("heartrate")) {
-							this.possibleCounter++;
+							this.heartRateData = true;
 							editEntry.heartrate(element.getValue());
+						} else if (element.getKey().equals("waypoints")) {
+							this.gpsData = true;
+							editEntry.waypoints(element.getValue());
 						}
 
 					}
@@ -119,34 +131,41 @@ public class HRMBuilder {
 				}
 			}
 		}
-		
+
 		for (Entry<String, TargetWord> element : targetWords.entrySet()) {
 			element.getValue().reset();
 			element.getValue().setFindStatus(false);
 		}
-		
-		if (this.possibleCounter == 7) {
+
+		if (possibleCounter > 4
+				&& (this.heartRateData == true || this.gpsData == true)) {
 			return true;
 		}
 		return false;
 	}
 
-	public boolean buildHrmFile(String outputFile) {
-		return buildInternFile(outputFile);
+	public EditEntrys getEditEntrys() {
+		return this.editEntry;
 	}
 
-	public boolean buildHrmFile() {
-		return buildInternFile(null);
+	public void buildHrmFile(String outputFile) {
+		this.buildInternHrmFile(outputFile);
 	}
 
-	public boolean buildInternFile(String outputFile) {
-		StringBuilder hrmBuilder = new StringBuilder();
-		int sMode;
-		if (this.editEntry.getsMode().equals("100000000")) {
-			sMode = 1;
-		} else {
-			sMode = 0;
-		}
+	public void buildHrmFile() {
+		this.buildInternHrmFile(null);
+	}
+
+	public void buildGpxFile(String outputFile) {
+		this.buildInternGpxFile(outputFile);
+	}
+
+	public void buildGpxFile() {
+		this.buildInternGpxFile(null);
+	}
+
+	public boolean buildInternHrmFile(String outputFile) {
+		StringBuffer hrmBuilder = new StringBuffer();
 
 		hrmBuilder.append("[Params]\n" + "Version=107\n" + "Monitor=1\n"
 				+ "SMode="
@@ -193,7 +212,7 @@ public class HRMBuilder {
 				+ "[Trip]\n\n"
 				+ "[HRData]\n");
 
-		if (sMode == 1) {
+		if (this.distanceData == true) {
 			for (int i = 0; i != this.editEntry.getHeartRateValues().size(); i++) {
 				hrmBuilder.append(this.editEntry.getHeartRateValues().get(i)
 						+ "\t" + this.editEntry.getDistanceValues().get(i)
@@ -211,7 +230,16 @@ public class HRMBuilder {
 			if (outputFile == null) {
 				fstream = new FileWriter("output.hrm");
 			} else {
-				fstream = new FileWriter(outputFile);
+				if (outputFile.toCharArray()[outputFile.length() - 1] != 'm'
+						|| outputFile.toCharArray()[outputFile.length() - 2] != 'r'
+						|| outputFile.toCharArray()[outputFile.length() - 3] != 'h') {
+					StringBuilder outputFileBuilder = new StringBuilder();
+					outputFileBuilder.append(outputFile + ".hrm");
+
+					fstream = new FileWriter(outputFileBuilder.toString());
+				} else {
+					fstream = new FileWriter(outputFile);
+				}
 			}
 			BufferedWriter out = new BufferedWriter(fstream);
 			out.write(hrmBuilder.toString());
@@ -223,7 +251,75 @@ public class HRMBuilder {
 		return true;
 	}
 
-	public EditEntrys getEditEntrys() {
-		return this.editEntry;
+	public boolean buildInternGpxFile(String outputFile) {
+		StringBuffer hrmBuilder = new StringBuffer();
+		int heartRateCounter1 = 0;
+		int heartRateCounter2 = 0;
+
+		hrmBuilder
+				.append("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?>\n"
+						+ "<gpx creator=\"NikeToHRM by Lukas Koehler\" version=\"2.1\">\n"
+						+ "<trk>\n" + "<name>NAME</name>\n" + "<trkseg>\n");
+
+		for (int counter = 0; counter < this.editEntry.getSpeed().size(); counter++) {
+			hrmBuilder.append("<trkpt lat=\""
+					+ this.editEntry.getLat().get(counter) + "\" lon=\""
+					+ this.editEntry.getLon().get(counter) + "\">\n" + "<ele>"
+					+ this.editEntry.getEle().get(counter) + "</ele>\n"
+					+ "<time>" + this.editEntry.getTime().get(counter)
+					+ "</time>\n" + "<extensions>\n"
+					+ "<gpxx:TrackPointExtension>\n");
+//					+ "<gpxx:speed>"
+//					+ this.editEntry.getSpeed().get(counter)
+//					+ "</gpxx:speed>\n");
+
+			if (this.heartRateData == true) {
+				hrmBuilder.append("<gpxx:hr>"
+						+ this.editEntry.getHeartRateValues().get(
+								heartRateCounter1) + "</gpxx:hr>\n");
+				if (heartRateCounter1 < this.editEntry.getHeartRateValues()
+						.size() - 1) {
+					heartRateCounter2++;
+					if (heartRateCounter2 == 10) {
+						heartRateCounter1++;
+						heartRateCounter2 = 0;
+					}
+				}
+			}
+
+			hrmBuilder.append("</gpxx:TrackPointExtension>\n"
+					+ "</extensions>\n" + "</trkpt>\n");
+		}
+
+		hrmBuilder.append("</trkseg>\n" + "</trk>\n" + "</gpx>\n");
+
+		FileWriter fstream;
+		try {
+			if (outputFile == null) {
+				fstream = new FileWriter("output.gpx");
+			} else {
+				if (outputFile.toCharArray()[outputFile.length() - 1] != 'x'
+						|| outputFile.toCharArray()[outputFile.length() - 2] != 'p'
+						|| outputFile.toCharArray()[outputFile.length() - 3] != 'g') {
+					StringBuilder outputFileBuilder = new StringBuilder();
+					outputFileBuilder.append(outputFile + ".gpx");
+
+					fstream = new FileWriter(outputFileBuilder.toString());
+				} else {
+					fstream = new FileWriter(outputFile);
+				}
+			}
+			BufferedWriter out = new BufferedWriter(fstream);
+			out.write(hrmBuilder.toString());
+			out.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+		return true;
+	}
+
+	public boolean getGpsStatus() {
+		return this.gpsData;
 	}
 }

@@ -33,11 +33,11 @@ public class Dialog extends javax.swing.JFrame {
 		this.mainWindow = mainWindow;
 		initGUI();
 	}
-	
+
 	public void setText(String text) {
 		this.textLabel.setText(text);
 	}
-	
+
 	public void setMode(int mode) {
 		this.mode = mode;
 		if (mode == this.HRM_BUILDED) {

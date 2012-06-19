@@ -34,7 +34,7 @@ public class FileChooser extends javax.swing.JFrame {
 		this.mode = 102;
 		initGUI();
 	}
-	
+
 	public void setMode(int mode) {
 		this.mode = mode;
 	}
@@ -68,8 +68,8 @@ public class FileChooser extends javax.swing.JFrame {
 				this.mainWindow.setOutputFile(this.fileChooser
 						.getSelectedFile().toString());
 			} else {
-				this.mainWindow.setInputFile(this.fileChooser
-						.getSelectedFile().toString());
+				this.mainWindow.setInputFile(this.fileChooser.getSelectedFile()
+						.toString());
 			}
 
 			this.setVisible(false);
