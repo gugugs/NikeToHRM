@@ -52,7 +52,12 @@ public class HRMBuilder {
 					&& filePath.toCharArray()[filePath.length() - 2] == 'm'
 					&& filePath.toCharArray()[filePath.length() - 3] == 't' && filePath
 						.toCharArray()[filePath.length() - 4] == 'h')) {
-				return false;
+
+				if (!(filePath.toCharArray()[filePath.length() - 1] == 'm'
+						&& filePath.toCharArray()[filePath.length() - 2] == 't' && filePath
+							.toCharArray()[filePath.length() - 3] == 'h')) {
+					return false;
+				}
 			}
 			File inputFile = new File(filePath);
 			FileInputStream FIStream = new FileInputStream(inputFile);
@@ -112,7 +117,6 @@ public class HRMBuilder {
 							possibleCounter++;
 							editEntry.duration(element.getValue());
 						} else if (element.getKey().equals("maximumHeartRate")) {
-							possibleCounter++;
 							editEntry.maximumHeartRate(element.getValue());
 						} else if (element.getKey().equals("intervalMetric")) {
 							possibleCounter++;
@@ -140,7 +144,7 @@ public class HRMBuilder {
 			element.getValue().setFindStatus(false);
 		}
 
-		if (possibleCounter > 4
+		if (possibleCounter > 3
 				&& (this.heartRateData == true || this.gpsData == true)) {
 			return true;
 		}
@@ -272,9 +276,9 @@ public class HRMBuilder {
 					+ "<time>" + this.editEntry.getTime().get(counter)
 					+ "</time>\n" + "<extensions>\n"
 					+ "<gpxx:TrackPointExtension>\n");
-//					+ "<gpxx:speed>"
-//					+ this.editEntry.getSpeed().get(counter)
-//					+ "</gpxx:speed>\n");
+			// + "<gpxx:speed>"
+			// + this.editEntry.getSpeed().get(counter)
+			// + "</gpxx:speed>\n");
 
 			if (this.heartRateData == true) {
 				hrmBuilder.append("<gpxx:hr>"
@@ -325,11 +329,11 @@ public class HRMBuilder {
 	public boolean getGpsStatus() {
 		return this.gpsData;
 	}
-	
+
 	public boolean getHeartRateStatus() {
 		return this.heartRateData;
 	}
-	
+
 	public boolean getDistanceStatus() {
 		return this.distanceData;
 	}
