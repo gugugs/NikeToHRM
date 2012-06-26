@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<gpx creator="NikeToHRM by Lukas Koehler" version="2.1">
+<gpx xmlns="http://www.topografix.com/GPX/1/1" creator="GPS-Track-Analyse.NET 6.0.0.4" version="1.1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.topografix.com/GPX/1/1 http://www.topografix.com/GPX/1/1/gpx.xsd" xmlns:gpxx="http://www.gps-freeware.de/xmlschema/TrackPointExtension/v1">
 <trk>
-<name>NAME</name>
+<name>Run nike-1629055139, Sun May 13 2012 10:40:09 GMT-0400 (EDT)</name>
 <trkseg>
 <trkpt lat="49.619926" lon="8.718578">
 <ele>250.395300</ele>

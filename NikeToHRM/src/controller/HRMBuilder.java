@@ -265,7 +265,12 @@ public class HRMBuilder {
 
 		hrmBuilder
 				.append("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?>\n"
-						+ "<gpx creator=\"NikeToHRM by Lukas Koehler\" version=\"2.1\">\n"
+						+ "<gpx xmlns=\"http://www.topografix.com/GPX/1/1\" "
+						+ "creator=\"NikeToHRM by Lukas Koehler\" version=\"1.1\" "
+						+ "xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" "
+						+ "xsi:schemaLocation=\"http://www.topografix.com/GPX/1/1 "
+						+ "http://www.topografix.com/GPX/1/1/gpx.xsd\" "
+						+ "xmlns:gpxx=\"http://www.gps-freeware.de/xmlschema/TrackPointExtension/v1\">\n"
 						+ "<trk>\n" + "<name>NAME</name>\n" + "<trkseg>\n");
 
 		for (int counter = 0; counter < this.editEntry.getSpeed().size(); counter++) {
