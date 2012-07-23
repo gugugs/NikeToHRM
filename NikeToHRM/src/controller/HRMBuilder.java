@@ -31,7 +31,7 @@ public class HRMBuilder {
 
 		this.targetWords.put("activityType", new TargetWord("activityType"));
 		this.targetWords.put("startTimeUtc", new TargetWord("startTimeUtc"));
-		this.targetWords.put("duration", new TargetWord("duration"));
+		this.targetWords.put("duration", new TargetWord("duration\":"));
 		this.targetWords.put("maximumHeartRate", new TargetWord(
 				"maximumHeartRate"));
 		this.targetWords

@@ -55,7 +55,7 @@ public class EditEntrys {
 
 	public void duration(TargetWord targetWord) {
 		StringBuffer buffer = new StringBuffer();
-		for (int counter = targetWord.getEndPosition() + 3; inputString
+		for (int counter = targetWord.getEndPosition() + 1; inputString
 				.get(counter) != ','; counter++) {
 			buffer.append(inputString.get(counter));
 		}
